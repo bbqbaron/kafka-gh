@@ -1,6 +1,8 @@
 (ns cons.core
-  (:require [cons.queue :as queue])
+  (:require
+    [cons.queue :as queue]
+    [cons.aggregate :as aggregate])
   (:gen-class))
 
 (defn -main []
-  (queue/go))
+  (aggregate/go)(queue/go))

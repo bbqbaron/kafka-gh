@@ -8,6 +8,7 @@
     [clj-kafka "0.3.3"]
     [cheshire "5.5.0"]
     [com.novemberain/monger "3.0.1"]
+    [clj-time "0.11.0"]
   ]
   :main ^:skip-aot cons.core
   :target-path "target/%s"
