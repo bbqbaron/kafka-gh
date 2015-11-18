@@ -1,11 +1,13 @@
 (ns cons.aggregate
   (:require
     [cheshire.core :refer [generate-string parse-string]]
-    [cons.queue :refer [config]]
     [clj-kafka.core :as core]
     [clj-kafka.consumer.zk :as zk]
     [clj-kafka.new.producer :as prod]
     [clj-time.core :as t]))
+
+(defonce config {"zookeeper.connect" "localhost:2181"
+  "group.id" "aggregator" "auto.offset.reset" "largest"})
 
 (defonce p (prod/producer {"bootstrap.servers" ["localhost:9092"]}
   (prod/string-serializer) (prod/string-serializer)))
@@ -37,6 +39,7 @@
     (zk/stream-seq stream))))
 
 (defn go []
+  (println "consume queue __all__")
   (core/with-resource [c (zk/consumer config)]
     zk/shutdown
     (let [stream (zk/create-message-stream c "__all__")]

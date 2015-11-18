@@ -8,7 +8,7 @@
 (import '(java.util.concurrent Executors))
 
 (defonce config {"zookeeper.connect" "localhost:2181"
-  "group.id" "eventTest" "auto.offset.reset" "largest"})
+  "group.id" "db-saver" "auto.offset.reset" "largest"})
 
 (defn handle-message [m]
   (db/save-message (parse-string (String. (:value m)) true)))
@@ -60,6 +60,7 @@
     (.shutdown pool)))
 
 (defn go []
+  (println "consume event queues")
   (core/with-resource [c (zk/consumer config)]
     zk/shutdown
     (let [streams (zk/create-message-streams c topicCounts)]

@@ -4,7 +4,6 @@
 
 (defonce conn (mg/connect))
 (defonce db (mg/get-db conn "gh"))
-(println conn)
 
 (defn save-message [message]
   (let [id (ObjectId.)
