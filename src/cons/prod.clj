@@ -10,7 +10,7 @@
     response
       (client/get
         "https://api.github.com/events"
-        {:headers {"User-Agent" "foo" "Authorization" "token db9b6ff2ebd4ee332b9f78f9e5923f2ad88a72c2"}})
+        {:headers {"User-Agent" "foo" "Authorization" "token"}})
     result (json/parse-string (:body response) true)
     firstResultString (json/generate-string (first result))
     topic (:type (first result))
