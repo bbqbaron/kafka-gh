@@ -5,10 +5,11 @@
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [
     [org.clojure/clojure "1.7.0"]
-    [clj-kafka "0.3.3"]
     [cheshire "5.5.0"]
-    [com.novemberain/monger "3.0.1"]
+    [clj-http "2.0.0"]
+    [clj-kafka "0.3.3"]
     [clj-time "0.11.0"]
+    [com.novemberain/monger "3.0.1"]
   ]
   :main ^:skip-aot cons.core
   :target-path "target/%s"
