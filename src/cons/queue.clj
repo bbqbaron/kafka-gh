@@ -1,19 +1,19 @@
-(ns cons.queue)
+(ns cons.queue
+  (:require
+    [clj-kafka.consumer.zk :as zk]
+    [clj-kafka.core :as core]
+    [cheshire.core :refer [parse-string]]
+    [cons.db :as db]))
 
 (import '(java.util.concurrent Executors))
 
-(use 'clj-kafka.consumer.zk)
-(use 'clj-kafka.core)
-
-(def config {"zookeeper.connect" "localhost:2181"
-             "group.id" "eventTest"
-             "auto.offset.reset" "smallest"
-             "auto.commit.enable" "false"})
+(defonce config {"zookeeper.connect" "localhost:2181"
+  "group.id" "eventTest" "auto.offset.reset" "largest"})
 
 (defn handle-message [m]
-  (println (String. (:value m))))
+  (db/save-message (parse-string (String. (:value m)) true)))
 
-(def topics [
+(defonce topics [
   "CommitCommentEvent"
   "CreateEvent"
   "DeleteEvent"
@@ -40,14 +40,14 @@
   "TeamAddEvent"
   "WatchEvent"])
 
-(def topicCounts
+(defonce topicCounts
   (reduce
     (fn [old new] (assoc old new 1))
     {}
     topics))
 
 (defn handle-stream [stream]
-  (dorun (map handle-message (stream-seq stream))))
+  (dorun (map handle-message (zk/stream-seq stream))))
 
 (defn handle-streams [streams]
   (let [pool (Executors/newFixedThreadPool (count topics))
@@ -56,10 +56,11 @@
             (fn []
               (handle-stream (first (get streams t)))))
           topics)]
-  (.invokeAll pool tasks)
-  (.shutdown pool)))
+    (.invokeAll pool tasks)
+    (.shutdown pool)))
 
-(with-resource [c (consumer config)]
-  shutdown
-  (let [streams (create-message-streams c topicCounts)]
-    (handle-streams streams)))
+(defn go []
+  (core/with-resource [c (zk/consumer config)]
+    zk/shutdown
+    (let [streams (zk/create-message-streams c topicCounts)]
+      (handle-streams streams))))
