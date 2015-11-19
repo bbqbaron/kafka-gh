@@ -2,7 +2,8 @@
   (:require
     [cons.queue :as queue]
     [cons.aggregate :as aggregate]
-    [cons.prod :as prod])
+    [cons.prod :as prod]
+    [cons.consume_aggregates :as cons-agg])
   (:gen-class))
 
 (import '(java.util.concurrent Executors))
@@ -11,6 +12,7 @@
   [
     queue/go
     aggregate/go
+    cons-agg/go
     prod/go
   ])
 
