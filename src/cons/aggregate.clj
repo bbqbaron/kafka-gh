@@ -1,15 +1,13 @@
 (ns cons.aggregate
   (:require
-    [cheshire.core :refer [generate-string parse-string]]
+    [cheshire.core :refer [generate-string]]
     [cons.consume :as c]
-    [clj-kafka.new.producer :as prod]
-    [clj-time.core :as t]))
-
-(defonce p (prod/producer {"bootstrap.servers" ["localhost:9092"]}
-  (prod/string-serializer) (prod/string-serializer)))
+    [clj-time.core :as t]
+    [cons.produce :as p]
+    [clj-kafka.new.producer :as prod]))
 
 (defn publish [{:keys [counts]}]
-  (prod/send p (prod/record "aggregates" (generate-string counts))))
+  (prod/send p/p (prod/record "aggregates" (generate-string counts))))
 
 (defn add-counts [new-counts state]
   (assoc state :counts new-counts))
@@ -20,8 +18,8 @@
 (defn handle [stream]
   (dorun (
     reduce
-      (fn [state {:keys [value]}]
-        (let [event (parse-string (String. value) true)
+      (fn [state message]
+        (let [event (c/body message)
             now (t/now)
             elapsed (t/interval (:last state) now)
             go (> (t/in-seconds elapsed) 10)
