@@ -10,6 +10,7 @@
   (let [response (client/get
           url
           {:headers {"User-Agent" "foo" "Authorization" (format "token %s" token)}})]
+    (println (:status response) " from " url)
     (json/parse-string (:body response) true)))
 
 (defn send-event [e]
@@ -20,10 +21,10 @@
 
 (defn get []
   (let [response (get-from-gh "https://api.github.com/events")]
-    (dorun (map send-event response))))
+    (dorun (map send-event (take 5 response)))))
 
 (defn go []
   (loop []
     (get)
-    (Thread/sleep 10000)
+    (Thread/sleep 20000)
     (recur)))

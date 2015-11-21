@@ -60,7 +60,6 @@
     (.shutdown pool)))
 
 (defn go []
-  (println "consume event queues")
   (core/with-resource [c (zk/consumer config)]
     zk/shutdown
     (let [streams (zk/create-message-streams c topicCounts)]

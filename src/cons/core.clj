@@ -4,7 +4,7 @@
     [cons.aggregate :as aggregate]
     [cons.github :as gh]
     [cons.consume_aggregates :as cons-agg]
-    [cons.map :as map]
+    [cons.language :as language]
     [cons.util :refer [thread]])
   (:gen-class))
 
@@ -19,7 +19,7 @@
     cons-agg/go
     cons-agg/go
     gh/go
-    map/go
+    language/go
   ])
 
 (defn run-kafka []
