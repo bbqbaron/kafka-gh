@@ -2,8 +2,6 @@
   (:require [cons.consume :as c]
             [cheshire.core :refer [parse-string]]))
 
-(defn handle [msg]
-  (println "received aggregate: ")
-  (println (parse-string (String. (:value msg)))))
+(defn handle [msg])
 
 (defn go [] (c/consume "aggregate-consumer" #(dorun (map handle %)) "aggregates"))

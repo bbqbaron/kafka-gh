@@ -1,0 +1,29 @@
+(ns cons.github
+  (:require [clj-http.client :as client]
+            [cheshire.core :as json]
+            [cons.produce :refer [p]]
+            [clj-kafka.new.producer :as prod]))
+
+(defonce token (slurp "/Users/ericloren/src/streams/clj/cons/token.txt"))
+
+(defn get-from-gh [url]
+  (let [response (client/get
+          url
+          {:headers {"User-Agent" "foo" "Authorization" (format "token %s" token)}})]
+    (json/parse-string (:body response) true)))
+
+(defn send-event [e]
+  (let [payload (json/generate-string e)
+          topic (:type e)]
+    @(prod/send p (prod/record topic payload)
+    @(prod/send p (prod/record "__all__" payload)))))
+
+(defn get []
+  (let [response (get-from-gh "https://api.github.com/events")]
+    (dorun (map send-event response))))
+
+(defn go []
+  (loop []
+    (get)
+    (Thread/sleep 10000)
+    (recur)))

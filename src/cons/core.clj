@@ -2,11 +2,13 @@
   (:require
     [cons.queue :as queue]
     [cons.aggregate :as aggregate]
-    [cons.prod :as prod]
+    [cons.github :as gh]
     [cons.consume_aggregates :as cons-agg]
     [cons.map :as map]
     [cons.util :refer [thread]])
   (:gen-class))
+
+(set! *warn-on-reflection* true)
 
 (import '(java.util.concurrent Executors))
 
@@ -16,7 +18,7 @@
     aggregate/go
     cons-agg/go
     cons-agg/go
-    prod/go
+    gh/go
     map/go
   ])
 
