@@ -11,5 +11,6 @@
 (defn handle-stream [stream]
   (dorun (map handle-message stream)))
 
-(defn go []
-  (c/consume "db-saver" handle-stream "__all__"))
+(def tasks [
+  (fn [] (c/consume "db-saver" handle-stream "__all__"))
+  ])

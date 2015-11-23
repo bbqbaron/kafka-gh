@@ -3,7 +3,7 @@
             [cons.util.produce :as p]
             [cons.github.github :as gh]
             [clj-kafka.new.producer :as prod]
-            [cons.util.util :refer [map-reduce, map-stream, thread]]))
+            [cons.util.util :refer [map-reduce map-stream]]))
 
 (defn message-to-language [m]
     (let [languages (-> m
@@ -14,15 +14,14 @@
                       :languages_url
                       gh/get-from-gh)]
           (if (> (count (keys languages)) 0)
-              (p/publish-as "languages" languages))))
+              languages {})))
 
 (defn language-mapper [stream]
   (dorun (map message-to-language stream)))
 
-(defn go []
-  (thread
-    [
-      (fn [] (map-reduce "languages" "reduced-languages" merge))
-      (fn [] (map-stream "__all__" "languages" message-to-language))
-      (fn [] (c/dump-stream "reduced-languages"))
-    ]))
+(def tasks
+  [
+    (fn [] (map-reduce "languages" "reduced-languages" merge))
+    (fn [] (map-stream "__all__" "languages" message-to-language))
+    (fn [] (c/dump-stream "reduced-languages"))
+  ])

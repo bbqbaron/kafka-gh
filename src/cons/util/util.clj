@@ -1,7 +1,6 @@
 (ns cons.util.util
   (:require [cons.util.consume :as c]
-            [cons.util.produce :as p]
-            [clojure.tools.logging :as log]))
+            [cons.util.produce :as p]))
 
 (import '(java.util.concurrent Executors))
 

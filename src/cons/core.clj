@@ -12,12 +12,15 @@
 (import '(java.util.concurrent Executors))
 
 (defonce tasks
-  [
-    saver/go
-    event-type/go
-    gh/go
-    language/go
-  ])
+  (reduce
+    concat
+    []
+    [
+      saver/tasks
+      event-type/tasks
+      gh/tasks
+      language/tasks
+    ]))
 
 (defn run-kafka []
   (thread tasks))

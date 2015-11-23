@@ -20,8 +20,11 @@
   (let [response (get-from-gh "https://api.github.com/events")]
     (dorun (map send-event (take 2 response)))))
 
-(defn go []
-  (loop []
-    (get)
-    (Thread/sleep 8000)
-    (recur)))
+(def tasks
+  [
+    (fn []
+      (loop []
+        (get)
+        (Thread/sleep 8000)
+        (recur)))
+  ])
