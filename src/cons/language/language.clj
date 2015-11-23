@@ -6,10 +6,13 @@
             [cons.util.util :refer [map-reduce, map-stream, thread]]))
 
 (defn message-to-language [m]
-    (let [body (c/body m)
-          repo-url (:url (:repo body))
-          repo (gh/get-from-gh repo-url)
-          languages (gh/get-from-gh (:languages_url repo))]
+    (let [languages (-> m
+                      c/body
+                      :repo
+                      :url
+                      gh/get-from-gh
+                      :languages_url
+                      gh/get-from-gh)]
           (if (> (count (keys languages)) 0)
               (p/publish-as "languages" languages))))
 
