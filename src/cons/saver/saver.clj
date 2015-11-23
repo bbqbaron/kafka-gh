@@ -12,5 +12,5 @@
   (dorun (map handle-message stream)))
 
 (def tasks [
-  (fn [] (c/consume "db-saver" handle-stream "__all__"))
+  #(c/consume "db-saver" handle-stream "__all__")
   ])

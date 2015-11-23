@@ -21,7 +21,7 @@
 
 (def tasks
   [
-    (fn [] (map-reduce "languages" "reduced-languages" merge))
-    (fn [] (map-stream "__all__" "languages" message-to-language))
-    (fn [] (c/dump-stream "reduced-languages"))
+    #(map-stream "__all__" "languages" message-to-language)
+    #(map-reduce "languages" "reduced-languages" merge)
+    #(c/dump-stream "reduced-languages")
   ])

@@ -22,9 +22,8 @@
 
 (def tasks
   [
-    (fn []
-      (loop []
+    #(loop []
         (get)
         (Thread/sleep 8000)
-        (recur)))
+        (recur))
   ])

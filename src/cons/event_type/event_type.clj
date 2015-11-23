@@ -12,6 +12,6 @@
 
 (def tasks
   [
-    (fn [] (map-reduce "__all__" "event-types" add-count))
-    (fn [] (c/dump-stream "event-types"))
+    #(map-reduce "__all__" "event-types" add-count)
+    #(c/dump-stream "event-types")
   ])
