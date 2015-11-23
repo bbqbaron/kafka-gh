@@ -14,5 +14,8 @@
 (defn body [m]
   (parse-string (String. (:value m)) true))
 
-(defn dump-stream [s]
-  (dorun (map (fn [m] (println (body m))) s)))
+(defn dump-stream [name]
+  (consume
+    (format "%s-dumper" name)
+    (fn [s] (dorun (map (fn [m] (println (body m))) s)))
+    name))
