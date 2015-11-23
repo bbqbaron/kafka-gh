@@ -1,5 +1,5 @@
-(ns cons.util
-  (:require [cons.consume :as c]
+(ns cons.util.util
+  (:require [cons.util.consume :as c]
             [clojure.tools.logging :as log]))
 
 (import '(java.util.concurrent Executors))
@@ -9,12 +9,11 @@
     (.invokeAll pool tasks)
     (.shutdown pool)))
 
-(defn reduce-counts [publish stream]
+(defn map-reduce [fun publish stream]
   (dorun
     (reduce
       (fn [state msg]
-        (println "reduced and publishing")
-        (let [new (merge state (c/body msg))]
+        (let [new (fun state (c/body msg))]
           (publish new)
           new))
       {}

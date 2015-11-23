@@ -1,4 +1,4 @@
-(ns cons.db
+(ns cons.util.db
   (:require [monger.core :as mg] [monger.collection :as mc] [monger.result :as mr])
   (:import org.bson.types.ObjectId))
 

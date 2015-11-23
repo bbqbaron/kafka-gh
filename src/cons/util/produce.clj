@@ -1,4 +1,4 @@
-(ns cons.produce
+(ns cons.util.produce
   (:require [clj-kafka.new.producer :as prod]
             [cheshire.core :refer [generate-string]]))
 
@@ -6,5 +6,4 @@
   (prod/string-serializer) (prod/string-serializer)))
 
 (defn publish-as [topic object]
-  @(prod/send p (prod/record topic (generate-string object)))
-  (println "published as " topic))
+  @(prod/send p (prod/record topic (generate-string object))))
